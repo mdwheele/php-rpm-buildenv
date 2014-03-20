@@ -47,13 +47,13 @@
 %{!?_httpd_contentdir: %{expand: %%global _httpd_contentdir /var/www}}
 
 %if 0%{?fedora} < 17 && 0%{?rhel} < 7
-%global with_zip     0
-%global with_libzip  0
-%global zipmod       %nil
-%else
 %global with_zip     1
-%global with_libzip  1
+%global with_libzip  0
 %global zipmod       zip
+%else
+%global with_zip     0
+%global with_libzip  1
+%global zipmod       %nil
 %endif
 
 %if 0%{?fedora} < 18 && 0%{?rhel} < 7
@@ -67,7 +67,7 @@
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
 Version: 5.4.26
-Release: 3.eos%{?dist}
+Release: 4.eos%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
@@ -1507,6 +1507,9 @@ fi
 %files interbase -f files.interbase
 
 %changelog
+* Tue Mar 18 2014 Daniel Sink <dssink@ncsu.edu> 5.4.26-4.eos
+- added support for zip in php-common
+
 * Mon Mar 17 2014 Daniel Sink <dssink@ncsu.edu> 5.4.26-3.eos
 - re-enabled interbase, mssql, imap, mcrypt, tidy
 
