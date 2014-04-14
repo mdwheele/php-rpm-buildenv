@@ -1507,6 +1507,9 @@ fi
 %files interbase -f files.interbase
 
 %changelog
+* Mon Apr 14 2014 Dustin Wheeler <mdwheele@ncsu.edu> 5.4.27-1.eos
+- Marks beginning of dynamic generated specfile as part of build process.
+
 * Tue Mar 18 2014 Daniel Sink <dssink@ncsu.edu> 5.4.26-4.eos
 - added support for zip in php-common
 
