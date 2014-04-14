@@ -27,18 +27,11 @@ resolve_versions: download_version_info
 
 download: resolve_versions
 	@echo "Downloading PHP from GitHub..."
-	wget https://github.com/php/php-src/archive/$(PHP_GITHUB_SOURCE_BRANCH).tar.gz 	\
-		-O $(PHP_GITHUB_WORKING_DIRECTORY)/$(RPM_PACKAGE_NAME).tar.gz				\
+	wget http://www.php.net/distributions/php-$(PHP_VERSION).tar.bz2			 	\
+		-O $(PHP_GITHUB_WORKING_DIRECTORY)/$(RPM_PACKAGE_NAME).tar.bz2				\
 		--quiet
 
-	@echo "Reorganizing tarball..."
-	tar -zxf $(PHP_GITHUB_WORKING_DIRECTORY)/$(RPM_PACKAGE_NAME).tar.gz 			\
-		--transform s/php-src-$(PHP_GITHUB_SOURCE_BRANCH)/$(RPM_PACKAGE_NAME)/				\
-		-C $(PHP_GITHUB_WORKING_DIRECTORY)
-
-	cd $(PHP_GITHUB_WORKING_DIRECTORY); tar -czf $(RPM_PACKAGE_NAME).tar.gz $(RPM_PACKAGE_NAME)/
-
-	mv $(PHP_GITHUB_WORKING_DIRECTORY)/$(RPM_PACKAGE_NAME).tar.gz ./buildroot/SOURCES
+	mv $(PHP_GITHUB_WORKING_DIRECTORY)/$(RPM_PACKAGE_NAME).tar.bz2 ./buildroot/SOURCES
 	rm -rf $(PHP_GITHUB_WORKING_DIRECTORY)
 	@echo "Finished grabbing source tarball!"
 
@@ -53,8 +46,8 @@ build: clean
 rpms: download build
 	@echo "Building Source RPM..."
 	rpmbuild --define="_topdir %(pwd)/buildroot" \
-	-bs ./buildroot/SPECS/php-eos.spec
+	-bs ./buildroot/SPECS/php-eos.spec --define="version $(PHP_VERSION)"
 
 	@echo "Building x86_64 RPMS..."
-	mock --scrub=all -r epel-6-x86_64 -v --rebuild buildroot/SRPMS/php-5.4.27-1.eos.el6.src.rpm \
-	--resultdir=./dist/"%(target_arch)s" --cleanup-after
+	mock --scrub=all -r epel-6-x86_64 -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-1.eos.el6.src.rpm \
+	--resultdir=./dist/"%(target_arch)s" --cleanup-after --define="version $(PHP_VERSION)"
