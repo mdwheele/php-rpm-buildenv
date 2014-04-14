@@ -66,7 +66,7 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
-Version: 5.4-latest
+Version: %{version}
 Release: 1.eos%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
@@ -75,7 +75,7 @@ License: PHP and Zend and BSD
 Group: Development/Languages
 URL: http://www.php.net/
 
-Source0: http://www.php.net/distributions/php-%{version}%{?rcver}.tar.bz2
+Source0: http://www.php.net/distributions/php-%{version}%{?rcver}.tar.gz
 Source1: php.conf
 Source2: php.ini
 Source3: macros.php
