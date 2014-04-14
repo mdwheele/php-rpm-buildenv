@@ -66,8 +66,8 @@
 
 Summary: PHP scripting language for creating dynamic web sites
 Name: php
-Version: 5.4.26
-Release: 4.eos%{?dist}
+Version: 5.4-latest
+Release: 1.eos%{?dist}
 # All files licensed under PHP version 3.01, except
 # Zend is licensed under Zend
 # TSRM is licensed under BSD
