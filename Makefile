@@ -50,7 +50,7 @@ build: clean
 	@echo "Creating empty distributable directory."
 	mkdir -p ./dist
 
-rpms: resolve_versions build
+rpms: download build
 	@echo "Building Source RPM..."
 	rpmbuild --define="_topdir %(pwd)/buildroot" --define="version $(PHP_VERSION)" \
 	-bs ./buildroot/SPECS/php-eos.spec
