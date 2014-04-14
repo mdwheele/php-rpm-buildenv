@@ -52,13 +52,9 @@ build: clean
 
 rpms: download build
 	@echo "Building Source RPM..."
-	rpmbuild --define="_topdir %(pwd)/buildroot" --define="version $(PHP_VERSION)" \
+	rpmbuild --define="_topdir %(pwd)/buildroot" \
 	-bs ./buildroot/SPECS/php-eos.spec
 
 	@echo "Building x86_64 RPMS..."
-	mock --scrub=all -r epel-6-x86_64 -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-1.eos.el6.src.rpm \
-	--resultdir=./dist/"%(target_arch)s" --cleanup-after
-
-	@echo "Building i386 RPMS..."
-	mock --scrub=all -r epel-6-i386 -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-1.eos.el6.src.rpm \
+	mock --scrub=all -r epel-6-x86_64 -v --rebuild buildroot/SRPMS/php-5.4.27-1.eos.el6.src.rpm \
 	--resultdir=./dist/"%(target_arch)s" --cleanup-after
