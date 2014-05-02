@@ -53,5 +53,5 @@ rpms: download build
 	--resultdir=./dist/"%(target_arch)s" --cleanup-after --define="version $(PHP_VERSION)"
 
 	@echo "Building i386 RPMS..."
-	mock --scrub=all -r epel-6-i386 -v --rebuild buildroot/SRPMS/php-5.4.26-4.eos.el6.src.rpm \
+	mock --scrub=all -r epel-6-i386 -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-1.eos.el6.src.rpm \
 	--resultdir=./dist/"%(target_arch)s" --cleanup-after --define="version $(PHP_VERSION)"
