@@ -21,7 +21,7 @@ download_version_info:
 
 resolve_versions: download_version_info
 	$(eval PHP_RELEASE_VERSION=$(shell sed -n '/#define PHP_RELEASE_VERSION /{s/.* //;p}' $(PHP_GITHUB_WORKING_DIRECTORY)/php_version.h))
-	$(eval PHP_VERSION=$(PHP_MAJOR_VERSION).$(PHP_MINOR_VERSION).$(shell expr $(PHP_RELEASE_VERSION) - 1))
+	$(eval PHP_VERSION=$(PHP_MAJOR_VERSION).$(PHP_MINOR_VERSION).$(shell expr $(PHP_RELEASE_VERSION) - 2))
 	$(eval PHP_GITHUB_SOURCE_BRANCH=PHP-$(PHP_VERSION))
 	$(eval RPM_PACKAGE_NAME=php-$(PHP_VERSION))
 
@@ -35,23 +35,19 @@ download: resolve_versions
 	rm -rf $(PHP_GITHUB_WORKING_DIRECTORY)
 	@echo "Finished grabbing source tarball!"
 
-clean:
-	@echo "Cleaning distributable directory."
-	-rm -rf ./dist/
-
 build: clean
 	@echo "Creating empty distributable directory."
 	mkdir -p ./dist
+
+clean:
+	@echo "Cleaning distributable directory."
+	-rm -rf ./dist/
 
 rpms: download build
 	@echo "Building Source RPM..."
 	rpmbuild --define="_topdir %(pwd)/buildroot" \
 	-bs ./buildroot/SPECS/php-eos.spec --define="version $(PHP_VERSION)"
 
-	@echo "Building x86_64 RPMS..."
-	mock --scrub=all -r epel-6-x86_64 -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-1.eos.el6.src.rpm \
-	--resultdir=./dist/"%(target_arch)s" --cleanup-after --define="version $(PHP_VERSION)"
-
-	@echo "Building i386 RPMS..."
-	mock --scrub=all -r epel-6-i386 -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-1.eos.el6.src.rpm \
+	@echo "Running mock with $(ARCH) architecture..."
+	mock --scrub=all -r $(ARCH) -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-$(BUILD_NUMBER).eos.el6.src.rpm \
 	--resultdir=./dist/"%(target_arch)s" --cleanup-after --define="version $(PHP_VERSION)"
