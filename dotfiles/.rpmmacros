@@ -1,1 +1,2 @@
 %_topdir %(pwd)
+%_smp_mflags -j9

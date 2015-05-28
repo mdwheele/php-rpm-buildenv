@@ -7,7 +7,7 @@
 %global oci8ver     2.0.9
 
 # Use for first build of PHP (before pecl/zip and pecl/jsonc)
-%global php_bootstrap   0
+%global php_bootstrap   1
 
 # Adds -z now to the linker flags
 %global _hardened_build 1
@@ -46,11 +46,7 @@
 %global with_libpcre  0
 %endif
 
-%if 0%{?fedora} < 17 && 0%{?rhel} < 6
 %global  with_vpx     0
-%else
-%global  with_vpx     1
-%endif
 
 # Build ZTS extension or only NTS
 %global with_zts      1
@@ -111,11 +107,8 @@
 %else
 %global with_dtrace 0
 %endif
-%if 0%{?fedora} < 14 && 0%{?rhel} < 5
+
 %global with_libgd   0
-%else
-%global with_libgd   1
-%endif
 
 %global with_libzip  0
 %global with_zip     0
@@ -387,6 +380,9 @@ Provides: php-filter, php-filter%{?_isa}
 Provides: php-ftp, php-ftp%{?_isa}
 Provides: php-gettext, php-gettext%{?_isa}
 Provides: php-hash, php-hash%{?_isa}
+Provides: php-json, php-json%{?_isa}
+Provides: php-pecl-json = %{jsonver}, php-pecl-json%{?_isa} = %{jsonver}
+Provides: php-pecl(json) = %{jsonver}, php-pecl(json)%{?_isa} = %{jsonver}
 Provides: php-mhash = %{version}, php-mhash%{?_isa} = %{version}
 Provides: php-iconv, php-iconv%{?_isa}
 Provides: php-libxml, php-libxml%{?_isa}
@@ -399,16 +395,12 @@ Provides: php-sockets, php-sockets%{?_isa}
 Provides: php-spl, php-spl%{?_isa}
 Provides: php-standard = %{version}, php-standard%{?_isa} = %{version}
 Provides: php-tokenizer, php-tokenizer%{?_isa}
-%if ! %{php_bootstrap}
-Requires: php-pecl-jsonc%{?_isa}
-%endif
 %if %{with_zip}
 Provides: php-zip, php-zip%{?_isa}
+Provides: php-zip, php-zip%{?_isa}
+Provides: php-pecl-zip = %{zipver}, php-pecl-zip%{?_isa} = %{zipver}
+Provides: php-pecl(zip) = %{zipver}, php-pecl(zip)%{?_isa} = %{zipver}
 Obsoletes: php-pecl-zip < 1.11
-%else
-%if ! %{php_bootstrap}
-Requires: php-pecl-zip%{?_isa}
-%endif
 %endif
 Provides: php-zlib, php-zlib%{?_isa}
 Obsoletes: php-pecl-phar < 1.2.4
@@ -733,32 +725,13 @@ support for multi-byte string handling to PHP.
 %package gd
 Summary: A module for PHP applications for using the gd graphics library
 Group: Development/Languages
-# All files licensed under PHP version 3.01
-%if %{with_libgd}
-License: PHP
-%else
-# bundled libgd is licensed under BSD
+# All files licensed under PHP version 3.01, except
+# libgd is licensed under BSD
 License: PHP and BSD
-%endif
 Requires: php-common%{?_isa} = %{version}-%{release}
-BuildRequires: t1lib-devel
-%if %{with_libgd}
-BuildRequires: gd-devel >= 2.1.1
-%if 0%{?fedora} <= 19 && 0%{?rhel} <= 7
-Requires: gd-last%{?_isa} >= 2.1.1
-%else
-Requires: gd%{?_isa} >= 2.1.1
-%endif
-%else
 # Required to build the bundled GD library
-BuildRequires: libjpeg-devel
-BuildRequires: libpng-devel
-BuildRequires: freetype-devel
-BuildRequires: libXpm-devel
-%if %{with_vpx}
-BuildRequires: libvpx-devel
-%endif
-%endif
+BuildRequires: libjpeg-devel, libpng-devel, freetype-devel
+BuildRequires: libXpm-devel, t1lib-devel, gd-devel
 
 Obsoletes: php53-gd, php53u-gd, php54-gd, php54w-gd, php55u-gd, php55w-gd, php56u-gd, php56w-gd
 
@@ -894,7 +867,7 @@ Group: System Environment/Libraries
 License: PHP
 Requires: php-common%{?_isa} = %{version}-%{release}
 # Upstream requires 4.0, we require 50 to ensure use of libicu-last
-BuildRequires: libicu-devel >= 50
+BuildRequires: libicu-devel >= 4.0
 Obsoletes: php53-intl, php53u-intl, php54-intl, php54w-intl, php55u-intl, php55w-intl, php56u-intl, php56w-intl
 
 %description intl
