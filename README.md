@@ -57,7 +57,8 @@ the default path is set at compile-time.
 
 **Running the Makefile**
 ```bash
-make ARCH="epel-6-x86_64" BUILD_NUMBER=1 CONFIG_PATH="/etc/custom"
+# -j is number of jobs to run. Should be NUM_CPU_CORES + 1 in most cases.
+make -j9 ARCH="epel-6-x86_64" BUILD_NUMBER=1 CONFIG_PATH="/etc" PREFIX="/usr"
 ```
 
 **Extracting RPMs to filesystem pre-tarball**
