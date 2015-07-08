@@ -55,8 +55,11 @@ rpms: download build
 
 	@echo "Running mock with $(ARCH) architecture..."
 	mock -r $(ARCH) -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-$(BUILD_NUMBER).eos.el6.src.rpm \
-	--resultdir=./dist/"%(target_arch)s" --cleanup-after \
+	--resultdir=./dist/"%(target_arch)s" --no-cleanup-after \
 	--define="version $(PHP_VERSION)" \
 	--define="build_number $(BUILD_NUMBER)" \
 	--define="_sysconfdir $(CONFIG_PATH)" \
 	--define="_prefix $(PREFIX)"
+
+	@echo "Copying BUILDROOT to dist..."
+	tar -czf ./dist/php-$(PHP_VERSION)-$(BUILD_NUMBER).eos.el6.tar.gz -C /var/lib/mock/$(ARCH)/root/builddir/build/BUILDROOT/php-$(PHP_VERSION)-$(BUILD_NUMBER).eos.el6.x86_64 .

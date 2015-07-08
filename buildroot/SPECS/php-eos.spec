@@ -3,7 +3,7 @@
 %global zendver     20131226
 %global pdover      20080721
 # Extension version
-%global opcachever  7.0.4-dev
+%global opcachever  7.0.6-dev
 %global oci8ver     2.0.9
 
 # Use for first build of PHP (before pecl/zip and pecl/jsonc)
@@ -187,8 +187,6 @@ Patch91: php-5.6.3-oci8conf.patch
 Patch300: php-5.6.3-datetests.patch
 # Revert changes for pcre < 8.34
 Patch301: php-5.6.0-oldpcre.patch
-# Backported from 7.0
-Patch302: php-5.6.8-openssltests.patch
 
 # WIP
 
@@ -933,7 +931,6 @@ rm -rf ext/json
 %patch301 -p1 -b .pcre834
 %endif
 %endif
-%patch302 -p1 -b .sslv3
 
 # WIP patch
 
@@ -971,6 +968,10 @@ rm ext/standard/tests/file/file_get_contents_error001.phpt
 rm ext/sockets/tests/mcast_ipv?_recv.phpt
 # cause stack exhausion
 rm Zend/tests/bug54268.phpt
+# avoid issue when 2 builds run simultaneously
+%ifarch x86_64
+sed -e 's/64321/64322/' -i ext/openssl/tests/*.phpt
+%endif
 
 # Safety check for API version change.
 pver=$(sed -n '/#define PHP_VERSION /{s/.* "//;s/".*$//;p}' main/php_version.h)
@@ -1919,6 +1920,7 @@ fi
 %files oci8 -f files.oci8
 %endif
 
+%clean
 
 %changelog
 * Fri May 15 2015 Remi Collet <remi@fedoraproject.org> 5.6.9-1
