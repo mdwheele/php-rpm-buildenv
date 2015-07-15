@@ -1086,7 +1086,7 @@ build --libdir=%{_libdir}/php \
       --enable-fileinfo=shared \
       --enable-intl=shared \
       --with-icu-dir=%{_prefix} \
-      --with-enchant=shared,%{_prefix} \
+      --with-enchant=shared,%{_prefix}
 popd
 
 without_shared="--without-gd \
@@ -1215,7 +1215,7 @@ build --includedir=%{_includedir}/php-zts \
       --enable-fileinfo=shared \
       --enable-intl=shared \
       --with-icu-dir=%{_prefix} \
-      --with-enchant=shared,%{_prefix} \
+      --with-enchant=shared,%{_prefix}
 popd
 
 # Build a special thread-safe Apache SAPI
