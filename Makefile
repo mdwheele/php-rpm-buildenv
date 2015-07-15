@@ -42,6 +42,7 @@ build: clean
 clean:
 	@echo "Cleaning distributable directory."
 	-rm -rf ./dist/
+	mock --clean --scrub=all
 
 rpms: download build
 	@echo "Building Source RPM..."
@@ -51,8 +52,8 @@ rpms: download build
 	--define="build_number $(BUILD_NUMBER)"
 
 	@echo "Running mock with $(ARCH) architecture..."
-	mock --scrub=all -r $(ARCH) -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-$(BUILD_NUMBER).eos.el6.src.rpm \
-	--resultdir=./dist/"%(target_arch)s" --cleanup-after \
+	mock -r $(ARCH) -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-$(BUILD_NUMBER).eos.el6.src.rpm \
+	--resultdir=./dist/"%(target_arch)s" --no-cleanup-after \
 	--define="version $(PHP_VERSION)" \
 	--define="build_number $(BUILD_NUMBER)"
 
