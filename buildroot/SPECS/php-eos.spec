@@ -1080,6 +1080,7 @@ EXTENSION_DIR=%{_libdir}/php/modules; export EXTENSION_DIR
 # separately.
 PEAR_INSTALLDIR=%{_datadir}/pear; export PEAR_INSTALLDIR
 
+
 # Shell function to configure and build a PHP tree.
 build() {
 # Old/recent bison version seems to produce a broken parser;
@@ -1106,7 +1107,6 @@ ln -sf ../configure
     --with-config-file-scan-dir=%{_sysconfdir}/php.d \
     --disable-debug \
     --with-pic \
-    --disable-rpath \
     --without-pear \
     --with-exec-dir=%{_bindir} \
     --with-freetype-dir=%{_prefix} \
