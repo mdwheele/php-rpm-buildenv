@@ -817,7 +817,7 @@ build --libdir=%{_libdir}/php \
       --enable-intl=shared \
       --with-icu-dir=%{_prefix} \
       --with-enchant=shared,%{_prefix} \
-      --with-mcrypt=shared,%{_prefix} \
+      --with-mcrypt=shared,%{_prefix}
 popd
 
 without_shared="--without-gd \
