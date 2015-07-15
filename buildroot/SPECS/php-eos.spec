@@ -156,12 +156,9 @@ Source99: php-fpm.init
 # Build fixes
 Patch5: php-5.6.3-includedir.patch
 Patch6: php-5.2.4-embed.patch
-Patch7: php-5.3.0-recode.patch
 Patch8: php-5.6.3-libdb.patch
 
 # Fixes for extension modules
-# https://bugs.php.net/63171 no odbc call during timeout
-Patch21: php-5.4.7-odbctimer.patch
 
 # Functional changes
 Patch40: php-5.4.0-dlopen.patch
@@ -451,21 +448,6 @@ bytecode in the shared memory. This eliminates the stages of reading code from
 the disk and compiling it on future access. In addition, it applies a few
 bytecode optimization patterns that make code execution faster.
 
-%package imap
-Summary: A module for PHP applications that use IMAP
-Group: Development/Languages
-# All files licensed under PHP version 3.01
-License: PHP
-Requires: php-common%{?_isa} = %{version}-%{release}
-Obsoletes: mod_php3-imap, stronghold-php-imap
-BuildRequires: krb5-devel, openssl-devel, libc-client-devel
-Obsoletes: php53-imap, php53u-imap, php54-imap, php54w-imap, php55u-imap, php55w-imap, php56u-imap, php56w-imap
-
-%description imap
-The php-imap module will add IMAP (Internet Message Access Protocol)
-support to PHP. IMAP is a protocol for retrieving and uploading e-mail
-messages on mail servers. PHP is an HTML-embedded scripting language.
-
 %package ldap
 Summary: A module for PHP applications that use LDAP
 Group: Development/Languages
@@ -561,27 +543,6 @@ The php-process package contains dynamic shared objects which add
 support to PHP using system interfaces for inter-process
 communication.
 
-%package odbc
-Summary: A module for PHP applications that use ODBC databases
-Group: Development/Languages
-# All files licensed under PHP version 3.01, except
-# pdo_odbc is licensed under PHP version 3.0
-License: PHP
-Requires: php-pdo%{?_isa} = %{version}-%{release}
-Provides: php_database
-Provides: php-pdo_odbc, php-pdo_odbc%{?_isa}
-BuildRequires: unixODBC-devel
-Obsoletes: php53-odbc, php53u-odbc, php54-odbc, php54w-odbc, php55u-odbc, php55w-odbc, php56u-odbc, php56w-odbc
-
-%description odbc
-The php-odbc package contains a dynamic shared object that will add
-database support through ODBC to PHP. ODBC is an open specification
-which provides a consistent API for developers to use for accessing
-data sources (which are often, but not always, databases). PHP is an
-HTML-embeddable scripting language. If you need ODBC support for PHP
-applications, you will need to install this package and the php
-package.
-
 %package soap
 Summary: A module for PHP applications that use the SOAP protocol
 Group: Development/Languages
@@ -594,31 +555,6 @@ Obsoletes: php53-soap, php53u-soap, php54-soap, php54w-soap, php55u-soap, php55w
 %description soap
 The php-soap package contains a dynamic shared object that will add
 support to PHP for using the SOAP web services protocol.
-
-%package interbase
-Summary: A module for PHP applications that use Interbase/Firebird databases
-Group: Development/Languages
-# All files licensed under PHP version 3.01
-License: PHP
-BuildRequires:  firebird-devel
-Requires: php-pdo%{?_isa} = %{version}-%{release}
-Provides: php_database
-Provides: php-firebird, php-firebird%{?_isa}
-Provides: php-pdo_firebird, php-pdo_firebird%{?_isa}
-Obsoletes: php53-interbase, php53u-interbase, php54-interbase, php54w-interbase, php55u-interbase, php55w-interbase, php56u-interbase, php56w-interbase
-
-%description interbase
-The php-interbase package contains a dynamic shared object that will add
-database support through Interbase/Firebird to PHP.
-
-InterBase is the name of the closed-source variant of this RDBMS that was
-developed by Borland/Inprise.
-
-Firebird is a commercially independent project of C and C++ programmers,
-technical advisors and supporters developing and enhancing a multi-platform
-relational database management system based on the source code released by
-Inprise Corp (now known as Borland Software Corp) under the InterBase Public
-License.
 
 %if %{with_oci8}
 %package oci8
@@ -763,19 +699,6 @@ Obsoletes: php53-gmp, php53u-gmp, php54-gmp, php54w-gmp, php55u-gmp, php55w-gmp,
 These functions allow you to work with arbitrary-length integers
 using the GNU MP library.
 
-%package dba
-Summary: A database abstraction layer module for PHP applications
-Group: Development/Languages
-# All files licensed under PHP version 3.01
-License: PHP
-BuildRequires: %{db_devel}, gdbm-devel, tokyocabinet-devel
-Requires: php-common%{?_isa} = %{version}-%{release}
-Obsoletes: php53-dba, php53u-dba, php54-dba, php54w-dba, php55u-dba, php55w-dba, php56u-dba, php56w-dba
-
-%description dba
-The php-dba package contains a dynamic shared object that will add
-support for using the DBA database abstraction layer to PHP.
-
 %package mcrypt
 Summary: Standard PHP module provides mcrypt library support
 Group: Development/Languages
@@ -789,36 +712,6 @@ Obsoletes: php53-mcrypt, php53u-mcrypt, php54-mcrypt, php54w-mcrypt, php55u-mcry
 The php-mcrypt package contains a dynamic shared object that will add
 support for using the mcrypt library to PHP.
 
-%package tidy
-Summary: Standard PHP module provides tidy library support
-Group: Development/Languages
-# All files licensed under PHP version 3.01
-License: PHP
-Requires: php-common%{?_isa} = %{version}-%{release}
-BuildRequires: libtidy-devel
-Obsoletes: php53-tidy, php53u-tidy, php54-tidy, php54w-tidy, php55u-tidy, php55w-tidy, php56u-tidy, php56w-tidy
-
-%description tidy
-The php-tidy package contains a dynamic shared object that will add
-support for using the tidy library to PHP.
-
-%package mssql
-Summary: MSSQL database module for PHP
-Group: Development/Languages
-# All files licensed under PHP version 3.01
-License: PHP
-Requires: php-pdo%{?_isa} = %{version}-%{release}
-BuildRequires: freetds-devel >= 0.91
-Provides: php-pdo_dblib, php-pdo_dblib%{?_isa}
-Provides: php-sybase_ct, php-sybase_ct%{?_isa}
-Obsoletes: php53-mssql, php53u-mssql, php54-mssql, php54w-mssql, php55u-mssql, php55w-mssql, php56u-mssql, php56w-mssql
-
-%description mssql
-The php-mssql package contains a dynamic shared object that will
-add MSSQL and Sybase database support to PHP.  It uses the TDS (Tabular
-DataStream) protocol through the freetds library, hence any
-database server which supports TDS can be accessed.
-
 %package embedded
 Summary: PHP library for embedding in applications
 Group: System Environment/Libraries
@@ -831,32 +724,6 @@ Obsoletes: php53-embedded, php53u-embedded, php54-embedded, php54w-embedded, php
 %description embedded
 The php-embedded package contains a library which can be embedded
 into applications to provide PHP scripting language support.
-
-%package pspell
-Summary: A module for PHP applications for using pspell interfaces
-Group: System Environment/Libraries
-# All files licensed under PHP version 3.01
-License: PHP
-Requires: php-common%{?_isa} = %{version}-%{release}
-BuildRequires: aspell-devel >= 0.50.0
-Obsoletes: php53-pspell, php53u-pspell, php54-pspell, php54w-pspell, php55u-pspell, php55w-pspell, php56u-pspell, php56w-pspell
-
-%description pspell
-The php-pspell package contains a dynamic shared object that will add
-support for using the pspell library to PHP.
-
-%package recode
-Summary: A module for PHP applications for using the recode library
-Group: System Environment/Libraries
-# All files licensed under PHP version 3.01
-License: PHP
-Requires: php-common%{?_isa} = %{version}-%{release}
-BuildRequires: recode-devel
-Obsoletes: php53-recode, php53u-recode, php54-recode, php54w-recode, php55u-recode, php55w-recode, php56u-recode, php56w-recode
-
-%description recode
-The php-recode package contains a dynamic shared object that will add
-support for using the recode library to PHP.
 
 %package intl
 Summary: Internationalization extension for PHP applications
@@ -901,10 +768,7 @@ rm -rf ext/json
 
 %patch5 -p1 -b .includedir
 %patch6 -p1 -b .embed
-%patch7 -p1 -b .recode
 %patch8 -p1 -b .libdb
-
-%patch21 -p1 -b .odbctimer
 
 %patch40 -p1 -b .dlopen
 %if 0%{?fedora} >= 19 || 0%{?rhel} >= 5
@@ -1155,7 +1019,6 @@ build --libdir=%{_libdir}/php \
       --enable-pcntl \
       --enable-opcache \
       --enable-phpdbg \
-      --with-imap=shared --with-imap-ssl \
       --enable-mbstring=shared \
       --enable-mbregex \
 %if %{with_libgd}
@@ -1168,9 +1031,6 @@ build --libdir=%{_libdir}/php \
       --enable-bcmath=shared \
       --with-bz2=shared \
       --enable-ctype=shared \
-      --enable-dba=shared --with-db4=%{_prefix} \
-                          --with-gdbm=%{_prefix} \
-                          --with-tcadb=%{_prefix} \
       --enable-exif=shared \
       --enable-ftp=shared \
       --with-gettext=shared \
@@ -1191,8 +1051,6 @@ build --libdir=%{_libdir}/php \
 %endif
       --with-pdo-oci=shared,instantclient,/usr,%{oraclever} \
 %endif
-      --with-interbase=shared,%{_libdir}/firebird \
-      --with-pdo-firebird=shared,%{_libdir}/firebird \
       --enable-dom=shared \
       --with-pgsql=shared \
       --enable-simplexml=shared \
@@ -1204,11 +1062,9 @@ build --libdir=%{_libdir}/php \
       --enable-xmlreader=shared --enable-xmlwriter=shared \
       --with-curl=shared,%{_prefix} \
       --enable-pdo=shared \
-      --with-pdo-odbc=shared,unixODBC,%{_prefix} \
       --with-pdo-mysql=shared,mysqlnd \
       --with-pdo-pgsql=shared,%{_prefix} \
       --with-pdo-sqlite=shared,%{_prefix} \
-      --with-pdo-dblib=shared,%{_prefix} \
 %if 0%{?fedora} >= 11 || 0%{?rhel} >= 6
       --with-sqlite3=shared,%{_prefix} \
 %else
@@ -1222,21 +1078,15 @@ build --libdir=%{_libdir}/php \
 %endif
       --without-readline \
       --with-libedit \
-      --with-pspell=shared \
       --enable-phar=shared \
       --with-mcrypt=shared,%{_prefix} \
-      --with-tidy=shared,%{_prefix} \
-      --with-mssql=shared,%{_prefix} \
-      --with-sybase-ct=shared,%{_prefix} \
       --enable-sysvmsg=shared --enable-sysvshm=shared --enable-sysvsem=shared \
       --enable-shmop=shared \
       --enable-posix=shared \
-      --with-unixODBC=shared,%{_prefix} \
       --enable-fileinfo=shared \
       --enable-intl=shared \
       --with-icu-dir=%{_prefix} \
       --with-enchant=shared,%{_prefix} \
-      --with-recode=shared,%{_prefix}
 popd
 
 without_shared="--without-gd \
@@ -1297,7 +1147,6 @@ build --includedir=%{_includedir}/php-zts \
       --with-config-file-scan-dir=%{_sysconfdir}/php-zts.d \
       --enable-pcntl \
       --enable-opcache \
-      --with-imap=shared --with-imap-ssl \
       --enable-mbstring=shared \
       --enable-mbregex \
 %if %{with_libgd}
@@ -1310,9 +1159,6 @@ build --includedir=%{_includedir}/php-zts \
       --enable-bcmath=shared \
       --with-bz2=shared \
       --enable-ctype=shared \
-      --enable-dba=shared --with-db4=%{_prefix} \
-                          --with-gdbm=%{_prefix} \
-                          --with-tcadb=%{_prefix} \
       --with-gettext=shared \
       --with-iconv=shared \
       --enable-sockets=shared \
@@ -1334,8 +1180,6 @@ build --includedir=%{_includedir}/php-zts \
 %endif
       --with-pdo-oci=shared,instantclient,/usr,%{oraclever} \
 %endif
-      --with-interbase=shared,%{_libdir}/firebird \
-      --with-pdo-firebird=shared,%{_libdir}/firebird \
       --enable-dom=shared \
       --with-pgsql=shared \
       --enable-simplexml=shared \
@@ -1347,11 +1191,9 @@ build --includedir=%{_includedir}/php-zts \
       --enable-xmlreader=shared --enable-xmlwriter=shared \
       --with-curl=shared,%{_prefix} \
       --enable-pdo=shared \
-      --with-pdo-odbc=shared,unixODBC,%{_prefix} \
       --with-pdo-mysql=shared,mysqlnd \
       --with-pdo-pgsql=shared,%{_prefix} \
       --with-pdo-sqlite=shared,%{_prefix} \
-      --with-pdo-dblib=shared,%{_prefix} \
 %if 0%{?fedora} >= 11 || 0%{?rhel} >= 6
       --with-sqlite3=shared,%{_prefix} \
 %else
@@ -1365,21 +1207,15 @@ build --includedir=%{_includedir}/php-zts \
 %endif
       --without-readline \
       --with-libedit \
-      --with-pspell=shared \
       --enable-phar=shared \
       --with-mcrypt=shared,%{_prefix} \
-      --with-tidy=shared,%{_prefix} \
-      --with-mssql=shared,%{_prefix} \
-      --with-sybase-ct=shared,%{_prefix} \
       --enable-sysvmsg=shared --enable-sysvshm=shared --enable-sysvsem=shared \
       --enable-shmop=shared \
       --enable-posix=shared \
-      --with-unixODBC=shared,%{_prefix} \
       --enable-fileinfo=shared \
       --enable-intl=shared \
       --with-icu-dir=%{_prefix} \
       --with-enchant=shared,%{_prefix} \
-      --with-recode=shared,%{_prefix}
 popd
 
 # Build a special thread-safe Apache SAPI
@@ -1544,25 +1380,24 @@ install -D -m 644 %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/nginx/default.d/php.
 (cd $RPM_BUILD_ROOT%{_bindir}; ln -sfn phar.phar phar)
 
 # Generate files lists and stub .ini files for each subpackage
-for mod in pgsql odbc ldap snmp xmlrpc imap \
+for mod in pgsql ldap snmp xmlrpc \
     mysqlnd mysql mysqli pdo_mysql \
-    mbstring gd dom xsl soap bcmath dba xmlreader xmlwriter \
+    mbstring gd dom xsl soap bcmath xmlreader xmlwriter \
     simplexml bz2 calendar ctype exif ftp gettext gmp iconv \
     sockets tokenizer opcache \
-    pdo pdo_pgsql pdo_odbc pdo_sqlite \
+    pdo pdo_pgsql pdo_sqlite \
 %if %{with_zip}
     zip \
 %endif
 %if %{with_oci8}
     oci8 pdo_oci \
 %endif
-    interbase pdo_firebird \
 %if 0%{?fedora} >= 11  || 0%{?rhel} >= 6
     sqlite3 \
 %endif
     enchant phar fileinfo intl \
-    mcrypt tidy pdo_dblib mssql sybase_ct pspell curl wddx \
-    posix shmop sysvshm sysvsem sysvmsg recode xml \
+    mcrypt curl wddx \
+    posix shmop sysvshm sysvsem sysvmsg xml \
     ; do
     case $mod in
       opcache)
@@ -1612,14 +1447,10 @@ cat files.mysql \
     >> files.mysqlnd
 
 # Split out the PDO modules
-cat files.pdo_dblib >> files.mssql
-cat files.sybase_ct >> files.mssql
 cat files.pdo_pgsql >> files.pgsql
-cat files.pdo_odbc >> files.odbc
 %if %{with_oci8}
 cat files.pdo_oci >> files.oci8
 %endif
-cat files.pdo_firebird >> files.interbase
 
 # sysv* and posix in packaged in php-process
 cat files.shmop files.sysv* files.posix > files.process
@@ -1881,8 +1712,6 @@ fi
 %{_libdir}/libphp5-%{embed_version}.so
 
 %files pgsql -f files.pgsql
-%files odbc -f files.odbc
-%files imap -f files.imap
 %files ldap -f files.ldap
 %files snmp -f files.snmp
 %files xml -f files.xml
@@ -1901,16 +1730,10 @@ fi
 %files bcmath -f files.bcmath
 %license libbcmath_COPYING
 %files gmp -f files.gmp
-%files dba -f files.dba
 %files pdo -f files.pdo
 %files mcrypt -f files.mcrypt
-%files tidy -f files.tidy
-%files mssql -f files.mssql
-%files pspell -f files.pspell
 %files intl -f files.intl
 %files process -f files.process
-%files recode -f files.recode
-%files interbase -f files.interbase
 %files enchant -f files.enchant
 %files mysqlnd -f files.mysqlnd
 %files opcache -f files.opcache
