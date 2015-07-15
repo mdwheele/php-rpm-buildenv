@@ -17,7 +17,7 @@
 %global mysql_sock %(mysql_config --socket 2>/dev/null || echo /var/lib/mysql/mysql.sock)
 
 # Regression tests take a long time, you can skip 'em with this
-%{!?runselftest: %{expand: %%global runselftest 1}}
+%{!?runselftest: %{expand: %%global runselftest 0}}
 
 # Use the arch-specific mysql_config binary to avoid mismatch with the
 # arch detection heuristic used by bindir/mysql_config.
@@ -957,7 +957,7 @@ build --libdir=%{_libdir}/php \
       --with-mssql=shared,%{_prefix} \
       --with-imap=shared --with-imap-ssl \
       --with-interbase=shared,%{_libdir}/firebird \
-      --with-pdo-firebird=shared,%{_libdir}/firebird 
+      --with-pdo-firebird=shared,%{_libdir}/firebird
 popd
 
 without_shared="--without-gd \
