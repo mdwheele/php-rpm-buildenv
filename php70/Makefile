@@ -17,6 +17,8 @@ all: rpms
 
 download:
 	@echo "Downloading PHP from GitHub..."
+	mkdir -p $(PHP_GITHUB_WORKING_DIRECTORY)
+
 	wget https://downloads.php.net/~ab/php-7.0.0beta2.tar.bz2					 	\
 		-O $(PHP_GITHUB_WORKING_DIRECTORY)/$(RPM_PACKAGE_NAME).tar.bz2				\
 		--quiet
@@ -43,6 +45,8 @@ rpms: download build
 
 	@echo "Running mock with $(ARCH) architecture..."
 	mock -r $(ARCH) -v --rebuild buildroot/SRPMS/php-$(PHP_VERSION)-$(BUILD_NUMBER).eos.el6.src.rpm \
+	--configdir=./ \
+	--enablerepo=remi \
 	--resultdir=./dist/"%(target_arch)s" --no-cleanup-after \
 	--define="version $(PHP_VERSION)" \
 	--define="build_number $(BUILD_NUMBER)"

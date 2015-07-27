@@ -1,0 +1,1 @@
+* Have to compile without `gd` because `libgd.so.3` is not installed on the box.
