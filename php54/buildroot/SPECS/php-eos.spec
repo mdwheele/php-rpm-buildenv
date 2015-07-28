@@ -94,6 +94,7 @@ Patch7: php-5.3.0-recode.patch
 Patch8: php-5.4.7-libdb.patch
 
 # Fixes for extension modules
+Patch21: php-5.4.7-odbctimer.patch
 
 # Fixed Bug #64949 (Buffer overflow in _pdo_pgsql_error)
 #Patch22: php-5.4.16-pdopgsql.patch
@@ -294,6 +295,24 @@ The php-devel package contains the files needed for building PHP
 extensions. If you need to compile your own PHP extensions, you will
 need to install this package.
 
+%package imap
+Summary: A module for PHP applications that use IMAP
+Group: Development/Languages
+# All files licensed under PHP version 3.01
+License: PHP
+Requires: php-common%{?_isa} = %{version}-%{release}
+Obsoletes: mod_php3-imap, stronghold-php-imap
+BuildRequires: krb5-devel, openssl-devel, libc-client-devel
+
+%description imap
+The php-imap package contains a dynamic shared object (DSO) for the
+Apache Web server. When compiled into Apache, the php-imap module will
+add IMAP (Internet Message Access Protocol) support to PHP. IMAP is a
+protocol for retrieving and uploading e-mail messages on mail
+servers. PHP is an HTML-embedded scripting language. If you need IMAP
+support for PHP applications, you will need to install this package
+and the php package.
+
 %package ldap
 Summary: A module for PHP applications that use LDAP
 Group: Development/Languages
@@ -411,6 +430,27 @@ The php-process package contains dynamic shared objects which add
 support to PHP using system interfaces for inter-process
 communication.
 
+%package odbc
+Summary: A module for PHP applications that use ODBC databases
+Group: Development/Languages
+# All files licensed under PHP version 3.01, except
+# pdo_odbc is licensed under PHP version 3.0
+License: PHP
+Requires: php-pdo%{?_isa} = %{version}-%{release}
+Provides: php_database
+Provides: php-pdo_odbc, php-pdo_odbc%{?_isa}
+Obsoletes: stronghold-php-odbc
+BuildRequires: unixODBC-devel
+
+%description odbc
+The php-odbc package contains a dynamic shared object that will add
+database support through ODBC to PHP. ODBC is an open specification
+which provides a consistent API for developers to use for accessing
+data sources (which are often, but not always, databases). PHP is an
+HTML-embeddable scripting language. If you need ODBC support for PHP
+applications, you will need to install this package and the php
+package.
+
 %package soap
 Summary: A module for PHP applications that use the SOAP protocol
 Group: Development/Languages
@@ -510,6 +550,18 @@ Requires: php-common%{?_isa} = %{version}-%{release}
 The php-bcmath package contains a dynamic shared object that will add
 support for using the bcmath library to PHP.
 
+%package dba
+Summary: A database abstraction layer module for PHP applications
+Group: Development/Languages
+# All files licensed under PHP version 3.01
+License: PHP
+BuildRequires: %{db_devel}, tokyocabinet-devel
+Requires: php-common%{?_isa} = %{version}-%{release}
+
+%description dba
+The php-dba package contains a dynamic shared object that will add
+support for using the DBA database abstraction layer to PHP.
+
 %package mcrypt
 Summary: Standard PHP module provides mcrypt library support
 Group: Development/Languages
@@ -566,6 +618,7 @@ support for using the enchant library to PHP.
 %patch6 -p1 -b .embed
 %patch8 -p1 -b .libdb
 
+%patch21 -p1 -b .odbctimer
 #%patch22 -p1 -b .pdopgsql
 #%patch23 -p1 -b .gc
 #%patch24 -p1 -b .fpm
@@ -782,6 +835,8 @@ build --libdir=%{_libdir}/php \
       --enable-mbregex \
       --with-gd=shared \
       --enable-bcmath=shared \
+      --enable-dba=shared --with-db4=%{_prefix} \
+                          --with-tcadb=%{_prefix} \
       --with-xmlrpc=shared \
       --with-ldap=shared --with-ldap-sasl \
       --enable-mysqlnd=shared \
@@ -797,6 +852,7 @@ build --libdir=%{_libdir}/php \
       --enable-xmlreader=shared --enable-xmlwriter=shared \
       --with-curl=shared,%{_prefix} \
       --enable-pdo=shared \
+      --with-pdo-odbc=shared,unixODBC,%{_prefix} \
       --with-pdo-mysql=shared,mysqlnd \
       --with-pdo-pgsql=shared,%{_prefix} \
       --with-pdo-sqlite=shared,%{_prefix} \
@@ -813,15 +869,17 @@ build --libdir=%{_libdir}/php \
       --enable-phar=shared \
       --enable-sysvmsg=shared --enable-sysvshm=shared --enable-sysvsem=shared \
       --enable-posix=shared \
+      --with-unixODBC=shared,%{_prefix} \
       --enable-fileinfo=shared \
       --enable-intl=shared \
       --with-icu-dir=%{_prefix} \
       --with-enchant=shared,%{_prefix} \
-      --with-mcrypt=shared,%{_prefix}
+      --with-mcrypt=shared,%{_prefix} \
+      --with-imap=shared --with-imap-ssl
 popd
 
 without_shared="--without-gd \
-      --disable-dom --disable-dba \
+      --disable-dom --disable-dba --without-unixODBC \
       --disable-xmlreader --disable-xmlwriter \
       --without-sqlite3 --disable-phar --disable-fileinfo \
       --disable-json --without-pspell --disable-wddx \
@@ -875,10 +933,13 @@ build --includedir=%{_includedir}/php-zts \
       --enable-maintainer-zts \
       --with-config-file-scan-dir=%{_sysconfdir}/php-zts.d \
       --enable-pcntl \
+      --with-imap=shared --with-imap-ssl \
       --enable-mbstring=shared \
       --enable-mbregex \
       --with-gd=shared \
       --enable-bcmath=shared \
+      --enable-dba=shared --with-db4-%{_prefix} \
+                          --with-tcadb=%{_prefix} \
       --with-xmlrpc=shared \
       --with-ldap=shared --with-ldap-sasl \
       --enable-mysqlnd=shared \
@@ -895,6 +956,7 @@ build --includedir=%{_includedir}/php-zts \
       --enable-xmlreader=shared --enable-xmlwriter=shared \
       --with-curl=shared,%{_prefix} \
       --enable-pdo=shared \
+      --with-pdo-odbc=shared,unixODBC,%{_prefix} \
       --with-pdo-mysql=shared,mysqlnd \
       --with-pdo-pgsql=shared,%{_prefix} \
       --with-pdo-sqlite=shared,%{_prefix} \
@@ -913,6 +975,7 @@ build --includedir=%{_includedir}/php-zts \
       --with-mcrypt=shared,%{_prefix} \
       --enable-sysvmsg=shared --enable-sysvshm=shared --enable-sysvsem=shared \
       --enable-posix=shared \
+      --with-unixODBC=shared,%{_prefix} \
       --enable-fileinfo=shared \
       --enable-intl=shared \
       --with-icu-dir=%{_prefix} \
@@ -1087,15 +1150,15 @@ install -m 644 %{SOURCE8} $RPM_BUILD_ROOT%{_sysconfdir}/sysconfig/php-fpm
 (cd $RPM_BUILD_ROOT%{_bindir}; ln -sfn phar.phar phar)
 
 # Generate files lists and stub .ini files for each subpackage
-for mod in pgsql ldap snmp xmlrpc \
+for mod in pgsql odbc ldap snmp xmlrpc \
     mysqlnd mysqlnd_mysql mysqlnd_mysqli pdo_mysqlnd \
-    mbstring gd dom xsl soap bcmath xmlreader xmlwriter \
-    pdo pdo_pgsql pdo_sqlite json %{zipmod} \
+    mbstring gd dom xsl soap bcmath dba xmlreader xmlwriter \
+    pdo pdo_pgsql pdo_odbc pdo_sqlite json %{zipmod} \
     sqlite3 \
     enchant phar fileinfo intl \
     curl wddx \
     posix sysvshm sysvsem sysvmsg \
-    mcrypt \
+    imap mcrypt \
 %if %{with_libmysql}
     mysql mysqli pdo_mysql \
 %endif
@@ -1137,6 +1200,7 @@ cat files.mysqlnd_mysql \
 
 # Split out the PDO modules
 cat files.pdo_pgsql >> files.pgsql
+cat files.pdo_odbc >> files.odbc
 
 # sysv* and posix in packaged in php-process
 cat files.sysv* files.posix > files.process
@@ -1324,6 +1388,7 @@ fi
 %if %{with_libmysql}
 %files mysql -f files.mysql
 %endif
+%files odbc -f files.odbc
 %files ldap -f files.ldap
 %files snmp -f files.snmp
 %files xml -f files.xml
@@ -1338,11 +1403,13 @@ fi
 %files soap -f files.soap
 %files bcmath -f files.bcmath
 %doc libbcmath_COPYING
+%files dba -f files.dba
 %files pdo -f files.pdo
 %files intl -f files.intl
 %files process -f files.process
 %files enchant -f files.enchant
 %files mysqlnd -f files.mysqlnd
+%files imap -f files.imap
 %files mcrypt -f files.mcrypt
 
 %clean
