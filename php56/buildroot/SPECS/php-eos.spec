@@ -1073,6 +1073,7 @@ build --libdir=%{_libdir}/php \
       --enable-pcntl \
       --enable-opcache \
       --enable-phpdbg \
+      --with-imap=shared --with-imap-ssl \
       --enable-mbstring=shared \
       --enable-mbregex \
 %if %{with_libgd}
@@ -1083,10 +1084,10 @@ build --libdir=%{_libdir}/php \
       --with-gmp=shared \
       --enable-calendar=shared \
       --enable-bcmath=shared \
-      --enable-dba=shared --with-db4=%{_prefix} \
-                          --with-tcadb=%{_prefix} \
       --with-bz2=shared \
       --enable-ctype=shared \
+      --enable-dba=shared --with-db4=%{_prefix} \
+                          --with-tcadb=%{_prefix} \
       --enable-exif=shared \
       --enable-ftp=shared \
       --with-gettext=shared \
@@ -1096,7 +1097,6 @@ build --libdir=%{_libdir}/php \
       --with-xmlrpc=shared \
       --with-ldap=shared --with-ldap-sasl \
       --enable-mysqlnd=shared \
-      --with-pdo-odbc=shared,unixODBC,%{_prefix} \
       --with-mysql=shared,mysqlnd \
       --with-mysqli=shared,mysqlnd \
       --with-mysql-sock=%{mysql_sock} \
@@ -1119,6 +1119,7 @@ build --libdir=%{_libdir}/php \
       --enable-xmlreader=shared --enable-xmlwriter=shared \
       --with-curl=shared,%{_prefix} \
       --enable-pdo=shared \
+      --with-pdo-odbc=shared,unixODBC,%{_prefix} \
       --with-pdo-mysql=shared,mysqlnd \
       --with-pdo-pgsql=shared,%{_prefix} \
       --with-pdo-sqlite=shared,%{_prefix} \
@@ -1145,8 +1146,7 @@ build --libdir=%{_libdir}/php \
       --enable-intl=shared \
       --with-icu-dir=%{_prefix} \
       --with-enchant=shared,%{_prefix} \
-      --with-mcrypt=shared,%{_prefix} \
-      --with-imap=shared --with-imap-ssl
+      --with-mcrypt=shared,%{_prefix}
 popd
 
 without_shared="--without-gd \
@@ -1206,8 +1206,8 @@ build --includedir=%{_includedir}/php-zts \
       --disable-cgi \
       --with-config-file-scan-dir=%{_sysconfdir}/php-zts.d \
       --enable-pcntl \
-      --with-imap=shared --with-imap-ssl \
       --enable-opcache \
+      --with-imap=shared --with-imap-ssl \
       --enable-mbstring=shared \
       --enable-mbregex \
 %if %{with_libgd}
@@ -1218,10 +1218,10 @@ build --includedir=%{_includedir}/php-zts \
       --with-gmp=shared \
       --enable-calendar=shared \
       --enable-bcmath=shared \
-      --enable-dba=shared --with-db4-%{_prefix} \
-                          --with-tcadb=%{_prefix} \
       --with-bz2=shared \
       --enable-ctype=shared \
+      --enable-dba=shared --with-db4=%{_prefix} \
+                          --with-tcadb=%{_prefix} \
       --with-gettext=shared \
       --with-iconv=shared \
       --enable-sockets=shared \
@@ -1254,7 +1254,7 @@ build --includedir=%{_includedir}/php-zts \
       --enable-xmlreader=shared --enable-xmlwriter=shared \
       --with-curl=shared,%{_prefix} \
       --enable-pdo=shared \
-      --with-pdo-odbc=shared,unixODBC,${_prefix} \
+      --with-pdo-odbc=shared,unixODBC,%{_prefix} \
       --with-pdo-mysql=shared,mysqlnd \
       --with-pdo-pgsql=shared,%{_prefix} \
       --with-pdo-sqlite=shared,%{_prefix} \
@@ -1445,11 +1445,11 @@ install -D -m 644 %{SOURCE14} $RPM_BUILD_ROOT%{_sysconfdir}/nginx/default.d/php.
 (cd $RPM_BUILD_ROOT%{_bindir}; ln -sfn phar.phar phar)
 
 # Generate files lists and stub .ini files for each subpackage
-for mod in pgsql odbc ldap snmp xmlrpc \
+for mod in pgsql odbc ldap snmp xmlrpc imap \
     mysqlnd mysql mysqli pdo_mysql \
     mbstring gd dom xsl soap bcmath dba xmlreader xmlwriter \
     simplexml bz2 calendar ctype exif ftp gettext gmp iconv \
-    sockets tokenizer opcache imap \
+    sockets tokenizer opcache \
     pdo pdo_pgsql pdo_odbc pdo_sqlite \
 %if %{with_zip}
     zip \
@@ -1513,6 +1513,7 @@ cat files.mysql \
 
 # Split out the PDO modules
 cat files.pdo_pgsql >> files.pgsql
+cat files.pdo_odbc >> files.odbc
 %if %{with_oci8}
 cat files.pdo_oci >> files.oci8
 %endif
@@ -1778,6 +1779,7 @@ fi
 
 %files pgsql -f files.pgsql
 %files odbc -f files.odbc
+%files imap -f files.imap
 %files ldap -f files.ldap
 %files snmp -f files.snmp
 %files xml -f files.xml
