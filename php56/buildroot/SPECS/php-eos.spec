@@ -4,7 +4,7 @@
 %global pdover      20080721
 # Extension version
 %global opcachever  7.0.6-dev
-%global oci8ver     2.0.9
+%global oci8ver     2.0.10
 
 # Use for first build of PHP (before pecl/zip and pecl/jsonc)
 %global php_bootstrap   1
@@ -155,10 +155,13 @@ Source99: php-fpm.init
 
 # Build fixes
 Patch5: php-5.6.3-includedir.patch
-Patch6: php-5.2.4-embed.patch
-Patch8: php-5.6.3-libdb.patch
+Patch6: php-5.6.3-embed.patch
+Patch7: php-5.3.0-recode.patch
+Patch8: php-5.6.17-libdb.patch
+Patch9: php-5.5.30-curl.patch
 
 # Fixes for extension modules
+# https://bugs.php.net/63171 no odbc call during timeout
 Patch21: php-5.4.7-odbctimer.patch
 
 # Functional changes
