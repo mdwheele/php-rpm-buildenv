@@ -4,7 +4,7 @@
 %global pdover      20080721
 # Extension version
 %global opcachever  7.0.6-dev
-%global oci8ver     2.0.10
+%global oci8ver     2.0.11
 
 # Use for first build of PHP (before pecl/zip and pecl/jsonc)
 %global php_bootstrap   1
