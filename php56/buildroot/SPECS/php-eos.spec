@@ -160,10 +160,6 @@ Patch7: php-5.3.0-recode.patch
 Patch8: php-5.6.17-libdb.patch
 Patch9: php-5.5.30-curl.patch
 
-# Fixes for extension modules
-# https://bugs.php.net/63171 no odbc call during timeout
-Patch21: php-5.4.7-odbctimer.patch
-
 # Functional changes
 Patch40: php-5.4.0-dlopen.patch
 Patch42: php-5.6.13-systzdata-v12.patch
@@ -824,8 +820,6 @@ rm -rf ext/json
 %patch5 -p1 -b .includedir
 %patch6 -p1 -b .embed
 %patch8 -p1 -b .libdb
-
-%patch21 -p1 -b .odbctimer
 
 %patch40 -p1 -b .dlopen
 %if 0%{?fedora} >= 19 || 0%{?rhel} >= 5
